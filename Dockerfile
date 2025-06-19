@@ -27,6 +27,10 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
+# Ensure public directory has proper permissions and create assets directory
+RUN mkdir -p ./public/assets/ocr-images
+RUN chown -R nextjs:nodejs ./public
+
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 

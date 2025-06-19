@@ -139,8 +139,13 @@ export async function POST(request: NextRequest) {
       const arrayBuffer = await pdfFile.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
-      // SDK가 처리할 수 있는 File 객체 생성
-      const fileObject = new File([buffer], pdfFile.name, { type: "application/pdf" })
+      // SDK가 처리할 수 있는 파일 객체 생성
+      // Mistral SDK가 Node.js 환경에서 Buffer를 직접 처리할 수 있도록 시도
+      const fileObject = Object.assign(buffer, {
+        name: pdfFile.name,
+        type: "application/pdf",
+        size: buffer.length
+      })
 
       // 1단계: SDK를 사용하여 파일 업로드
       console.log("Uploading file to Mistral...")

@@ -25,8 +25,15 @@ type ImageMap = Record<string, string>
  * 디렉토리가 존재하는지 확인하고 없으면 생성
  */
 function ensureDirectoryExists(directory: string): void {
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true })
+  try {
+    if (!fs.existsSync(directory)) {
+      console.log(`Creating directory: ${directory}`)
+      fs.mkdirSync(directory, { recursive: true })
+      console.log(`Directory created successfully: ${directory}`)
+    }
+  } catch (error) {
+    console.error(`Failed to create directory ${directory}:`, error)
+    throw new Error(`Directory creation failed: ${directory}. Error: ${error}`)
   }
 }
 
